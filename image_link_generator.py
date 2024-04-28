@@ -14,7 +14,7 @@ logger.add(FILE_NAME_LOG_LINK,
 app = Flask(__name__)
 
 
-@app.route('/multifinderbrands.php', methods=['POST'])
+@app.route('/multifinderbrands.py', methods=['POST'])
 def get_image_links():
     # Распаковываем параметры в JSON
     data = request.get_json()
