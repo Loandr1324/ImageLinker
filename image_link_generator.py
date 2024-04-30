@@ -1,5 +1,6 @@
 # Author Loik Andrey mail: loikand@mail.ru
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, Response
+import json
 from flask_cors import CORS
 from loguru import logger
 from config import FILE_NAME_LOG_LINK, FILE_NAME_IMAGE_LINK
@@ -14,6 +15,7 @@ logger.add(FILE_NAME_LOG_LINK,
 
 app = Flask(__name__)
 CORS(app)
+
 
 @app.route('/multifinderbrands.py', methods=['POST'])
 def get_image_links():
@@ -51,6 +53,7 @@ def get_image_links():
                 # Т.к. в базе может быть несколько вариантов с одним брендом артикулом, то выбираем точное соответствие
                 number = image.get('number', '').split("_")
                 if article == number[0]:
+                    # Добавляем URL без предварительного экранирования
                     response.append({"url": image['url']})
 
         # Если данных нет, то возвращаем ошибку
@@ -62,7 +65,9 @@ def get_image_links():
     if not response:
         abort(404, description="No matching images found for any items")
 
-    return jsonify(response)
+    # Сериализуем в JSON вручную, экранируя символы "/"
+    response_json = json.dumps(response).replace("/", "\\/")
+    return Response(response_json, mimetype='application/json')
 
 
 if __name__ == '__main__':
