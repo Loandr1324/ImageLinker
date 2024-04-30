@@ -13,7 +13,7 @@ logger.add(FILE_NAME_LOG_LINK,
            compression="zip")
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/multifinderbrands.py', methods=['POST'])
 def get_image_links():
@@ -67,4 +67,3 @@ def get_image_links():
 
 if __name__ == '__main__':
     app.run()
-    CORS(app)
