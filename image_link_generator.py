@@ -1,5 +1,6 @@
 # Author Loik Andrey mail: loikand@mail.ru
 from flask import Flask, request, jsonify, abort
+from flask_cors import CORS
 from loguru import logger
 from config import FILE_NAME_LOG_LINK, FILE_NAME_IMAGE_LINK
 from data.csv_work import WorkCSV
@@ -66,3 +67,4 @@ def get_image_links():
 
 if __name__ == '__main__':
     app.run()
+    CORS(app)
