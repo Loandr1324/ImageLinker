@@ -51,7 +51,7 @@ def get_image_links():
                 # Т.к. в базе может быть несколько вариантов с одним брендом артикулом, то выбираем точное соответствие
                 number = image.get('number', '').split("_")
                 if article == number[0]:
-                    response.append({"url": image['url_abcp']})
+                    response.append({"url": image['url']})
 
         # Если данных нет, то возвращаем ошибку
         else:
