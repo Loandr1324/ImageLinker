@@ -1,7 +1,7 @@
 # Author Loik Andrey mail: loikand@mail.ru
 from flask import Flask, request, jsonify, abort
 from loguru import logger
-from config import FILE_NAME_LOG_LINK,FILE_NAME_IMAGE_LINK
+from config import FILE_NAME_LOG_LINK, FILE_NAME_IMAGE_LINK
 from data.csv_work import WorkCSV
 
 # Задаём параметры логирования
@@ -16,11 +16,16 @@ app = Flask(__name__)
 
 @app.route('/multifinderbrands.py', methods=['POST'])
 def get_image_links():
-    # Распаковываем параметры в JSON
-    data = request.get_json()
-    if not data:
-        logger.error("Empty request data")
-        abort(400, description="Bad Request: No data provided")
+    # Проверяем тип содержимого запроса и извлекаем данные соответствующим образом
+    if request.content_type == 'application/json':
+        data = request.get_json()
+        if not data:
+            logger.error("Empty request data")
+            abort(400, description="Bad Request: No data provided")
+    elif request.content_type == 'application/x-www-form-urlencoded':
+        data = [request.form]  # Оборачиваем form dict в список для унификации обработки
+    else:
+        abort(400, description="Unsupported Media Type")
 
     # Получаем данные из базы данных по существующим ссылкам
     wk_csv = WorkCSV(FILE_NAME_IMAGE_LINK)
