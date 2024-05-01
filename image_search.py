@@ -1,5 +1,5 @@
 # Author Loik Andrey mail: loikand@mail.ru
-import yadisk
+import os
 from loguru import logger
 from config import YA_TOKEN, FILE_NAME_LOG_SEARCH, FILE_NAME_IMAGE_LINK, FOLDER_YA_IMAGE
 from data.csv_work import WorkCSV
@@ -12,36 +12,21 @@ logger.add(FILE_NAME_LOG_SEARCH,
            compression="zip")
 
 
-def list_images_in_public_folder(y: yadisk.client.Client, path: str, public_url_base: str, list_url: list) -> None:
+def list_images_in_local_folder(base_url: str, local_path: str, list_url: list) -> None:
     try:
-        # Получаем список всех элементов в текущей директории
-        items = y.listdir(path)
-
-        for item in items:
-            # Полный путь к текущему элементу
-            item_path = f"{path}/{item.name}".replace("//", "/")
-
-            if item.type == "dir":
-                # Если элемент является директорией, рекурсивно вызываем функцию
-                list_images_in_public_folder(y, item_path, public_url_base, list_url)
-
-            elif item.type == "file" and item.media_type == "image":
-                # Формируем путь для вывода
-                path1 = item_path.split('/IM_images/', 1)[1].split('/')
-                brand_name = path1[0]
-                filename = path1[1]
-                number = filename.split('.')[0]
-                logger.debug(f"{brand_name=}, {number=}")
-                display_path = f"{public_url_base}/{item_path.split('/IM_images/', 1)[1]}"
-                abcp_path = f"{public_url_base}/{brand_name}/{filename}".replace("/", "\/")
-
-                # Выводим информацию о файле
-                logger.debug(f"Путь: {display_path}")
-                logger.debug(f"Путь ABCP: {abcp_path}")
-                list_url.append({'brand_name': brand_name,'number': number, 'url': display_path, 'url_abcp': abcp_path})
-
+        # Проходим по всем файлам в директории и поддиректориях
+        for root, dirs, files in os.walk(local_path):
+            for file in files:
+                if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
+                    full_path = os.path.join(root, file)
+                    relative_path = os.path.relpath(full_path, local_path)
+                    brand_name = relative_path.split(os.sep)[0]
+                    number = os.path.splitext(file)[0]
+                    url = f"{base_url}/{brand_name}/{file}"
+                    logger.debug(f"Brand: {brand_name}, Number: {number}, URL: {url}")
+                    list_url.append({'brand_name': brand_name, 'number': number, 'url': url})
     except Exception as e:
-        logger.error(f"Ошибка при доступе к {path}: {e}")
+        logger.error(f"Ошибка при доступе к {local_path}: {e}")
 
 
 def save_csv(url_list: list[dict]) -> None:
@@ -56,34 +41,17 @@ def save_csv(url_list: list[dict]) -> None:
             brand=item['brand_name'],
             number=item['number'],
             url=item['url'],
-            url_abcp=item['url_abcp'],
             type_data='image_link'
         )
     wk_csv.add_data_file()
 
 
 def run():
-
-    y = yadisk.YaDisk(token=YA_TOKEN)  # smart
     list_url = []
-    # Проверяем, подключены ли мы к Яндекс.Диску
-    if y.check_token():
-        logger.info("Авторизация прошла успешно!")
-        # Получаем метаданные папки IM_images
-        meta = y.get_meta(FOLDER_YA_IMAGE)
-
-        if not meta.public_url:
-            logger.error("Подумай над тем, чтобы сделать эту папку публичной")
-            # # Если папка не является публичной, делаем её публичной
-            # y.publish("/IM_images")
-            # # Обновляем метаданные после публикации
-            # meta = y.get_meta("/IM_images")
-        else:
-            # Вызываем функцию для публичной папки FOLDER_YA_IMAGE
-            list_images_in_public_folder(y, FOLDER_YA_IMAGE, meta.public_url, list_url)
-            save_csv(list_url)
-    else:
-        logger.error("Ошибка авторизации")
+    base_url = "https://img.smart-a.ru/images"
+    # list_images_in_local_folder(base_url, "C:\\srv\\images", list_url)  # для Windows
+    list_images_in_local_folder(base_url, "/srv/images/", list_url)  # для Ubuntu
+    save_csv(list_url)
 
 
 if __name__ == '__main__':

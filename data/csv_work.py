@@ -67,7 +67,6 @@ class WorkCSV:
                 'brand': kwargs['brand'],
                 'number': kwargs['number'],
                 'url': kwargs['url'],
-                'url_abcp': kwargs['url_abcp']
             }]
 
     def add_data_file(self, mode="w"):
