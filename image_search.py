@@ -1,7 +1,7 @@
 # Author Loik Andrey mail: loikand@mail.ru
 import os
 from loguru import logger
-from config import YA_TOKEN, FILE_NAME_LOG_SEARCH, FILE_NAME_IMAGE_LINK, FOLDER_YA_IMAGE
+from config import FILE_NAME_LOG_SEARCH, FILE_NAME_IMAGE_LINK, BASE_URL, LOCAL_PATH
 from data.csv_work import WorkCSV
 
 # Задаём параметры логирования
@@ -47,11 +47,13 @@ def save_csv(url_list: list[dict]) -> None:
 
 
 def run():
+    logger.info(f"Запускаем поиск изображений в папке {LOCAL_PATH}")
     list_url = []
     base_url = "https://img.smart-a.ru/images"
     # list_images_in_local_folder(base_url, "C:\\srv\\images", list_url)  # для Windows
-    list_images_in_local_folder(base_url, "/srv/images/", list_url)  # для Ubuntu
+    list_images_in_local_folder(BASE_URL, LOCAL_PATH, list_url)  # для Ubuntu
     save_csv(list_url)
+    logger.info(f"Поиск изображений завершён")
 
 
 if __name__ == '__main__':
