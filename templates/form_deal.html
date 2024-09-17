@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>Новая сделка</div>
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.manager.label }}<br>
+        {{ form.manager(size=40) }}<br>
+        {% for error in form.manager.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.client.label }}<br>
+        {{ form.client(size=40) }}<br>
+        {% for error in form.client.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.car_model.label }}<br>
+        {{ form.car_model(size=1) }}<br>
+        {% for error in form.car_model.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.car_color.label }}<br>
+        {{ form.car_color(size=1) }}<br>
+        {% for error in form.car_color.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.year_prod.label }}<br>
+        {{ form.year_prod(size=1) }}<br>
+        {% for error in form.year_prod.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.profit_car_body.label }}<br>
+        {{ form.profit_car_body(size=20) }}<br>
+        {% for error in form.profit_car_body.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.profit_add_equip.label }}<br>
+        {{ form.profit_add_equip(size=20) }}<br>
+        {% for error in form.profit_add_equip.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.profit_credit.label }}<br>
+        {{ form.profit_credit(size=20) }}<br>
+        {% for error in form.profit_credit.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.comp_suppl.label }}<br>
+        {{ form.comp_suppl(size=20) }}<br>
+        {% for error in form.comp_suppl.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.trade_in.label }}
+        {{ form.trade_in() }}<br>
+        {% for error in form.trade_in.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <br>
+    <p>
+        {{ form.credit.label }}
+        {{ form.credit(size=20) }}<br>
+        {% for error in form.credit.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <br>
+    <p>
+        {{ form.kasko.label }}
+        {{ form.kasko() }}<br>
+        {% for error in form.kasko.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <br>
+    <p>
+        {{ form.date_issue.label }}<br>
+        {{ form.date_issue(size=40) }}<br>
+        {% for error in form.date_issue.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit() }}</p>
+</form>
+{% endblock %}
