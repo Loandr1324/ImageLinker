@@ -32,6 +32,8 @@ def get_image_links():
     else:
         abort(400, description="Unsupported Media Type")
 
+    logger.info(f"Поступили параметры: {data=}")
+
     # Получаем данные из базы данных по существующим ссылкам
     wk_csv = WorkCSV(FILE_NAME_IMAGE_LINK)
 
