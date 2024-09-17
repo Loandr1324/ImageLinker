@@ -40,8 +40,8 @@ def get_image_links():
     # Формируем ответ на POST запрос из имеющихся данных
     response = []
     for item in data:
-        brand = item.get('brand')
-        article = item.get('article')
+        brand = item.get('brand', 'No brand found')
+        article = item.get('article', 'No article found')
         logger.debug(f"Поступил запрос: {item=}")
         logger.debug(f"Выделили: {brand=}, article: {article=}")
 
