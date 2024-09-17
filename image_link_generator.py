@@ -28,7 +28,7 @@ def get_image_links():
             logger.error("Empty request data")
             abort(400, description="Bad Request: No data provided")
     elif request.content_type == 'application/x-www-form-urlencoded':
-        data = [request.form][0]  # Оборачиваем form dict в список для унификации обработки
+        data = request.form  # Оборачиваем form dict в список для унификации обработки
     else:
         abort(400, description="Unsupported Media Type")
 
