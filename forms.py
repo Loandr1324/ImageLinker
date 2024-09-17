@@ -1,6 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import (StringField, PasswordField, BooleanField, SubmitField, SelectField, IntegerField, RadioField,
-                     SelectMultipleField)
+from wtforms import StringField, SubmitField, SelectField, IntegerField, RadioField
 from wtforms.validators import DataRequired
 from config import CAR_MODEL, CAR_COLOR, YEAR_PROD
 
