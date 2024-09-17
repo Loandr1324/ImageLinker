@@ -1,10 +1,11 @@
 # Author Loik Andrey mail: loikand@mail.ru
-from flask import Flask, request, jsonify, abort, Response
+from flask import Flask, request, jsonify, abort, Response, render_template, flash, redirect
 import json
 from flask_cors import CORS
 from loguru import logger
-from config import FILE_NAME_LOG_LINK, FILE_NAME_IMAGE_LINK
+from config import FILE_NAME_LOG_LINK, FILE_NAME_IMAGE_LINK, SECRET_KEY
 from data.csv_work import WorkCSV
+from forms import LoginForm
 
 # Задаём параметры логирования
 logger.add(FILE_NAME_LOG_LINK,
@@ -15,6 +16,7 @@ logger.add(FILE_NAME_LOG_LINK,
 
 app = Flask(__name__)
 CORS(app)
+app.config['SECRET_KEY'] = SECRET_KEY
 
 
 @app.route('/multifinderbrands.py', methods=['POST'])
@@ -70,5 +72,19 @@ def get_image_links():
     return Response(response_json, mimetype='application/json')
 
 
+@app.route('/form_deal', methods=['GET', 'POST'])
+def form_deal():
+    form = LoginForm()
+    if form.validate_on_submit():
+        # TODO Здесь будет описаны действия с данными заполненной формы.
+        #  Отправка в телеграм
+        # flash('Login requested for user {}'.format(
+        #     form.client.data))
+        # flash("Что-то пошло не так", "error")
+        return redirect('/form_deal')
+
+    return render_template('form_deal.html', form=form)
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
