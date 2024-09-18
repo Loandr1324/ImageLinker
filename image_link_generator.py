@@ -34,6 +34,9 @@ def get_image_links():
         else:
             keys_str = list(request.form.keys())[0]
             data = json.loads(keys_str)
+        if not data:
+            logger.error("Empty request data")
+            abort(400, description="Bad Request: No data provided")
     else:
         abort(400, description="Unsupported Media Type")
 
