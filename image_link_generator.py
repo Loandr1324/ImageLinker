@@ -90,6 +90,7 @@ def get_image_links():
 @app.route('/form_deal', methods=['GET', 'POST'])
 def form_deal():
     form = LoginForm()
+    form.manager.data = request.args.get('name')
     if form.validate_on_submit():
         logger.debug(f"{form.data=}")
         logger.debug(f"{form.car_model.data=}")
@@ -97,13 +98,11 @@ def form_deal():
         logger.debug(f"{form.car_model.label=}")
         logger.debug(f"{form.car_model.name=}")
         logger.debug(f"{form.car_model=}")
+
+        # Отправляем сообщение в телеграм с данными из формы
         message, keyboard = st.create_message(form.data)
         result = st.send_message(message, keyboard)
-        # TODO Здесь будет описаны действия с данными заполненной формы.
-        #  Отправка в телеграм
-        # flash('Login requested for user {}'.format(
-        #     form.client.data))
-        # flash("Что-то пошло не так", "error")
+
         return redirect('/form_deal')
 
     return render_template('form_deal.html', form=form)
