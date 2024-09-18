@@ -40,7 +40,7 @@ def get_image_links():
     else:
         abort(400, description="Unsupported Media Type")
 
-    logger.debug(f"Поступили параметры: {data=}")
+    # logger.debug(f"Поступили параметры: {data=}")
 
     # Получаем данные из базы данных по существующим ссылкам
     wk_csv = WorkCSV(FILE_NAME_IMAGE_LINK)
@@ -48,10 +48,10 @@ def get_image_links():
     # Формируем ответ на POST запрос из имеющихся данных
     response = []
     for item in data:
-        logger.debug(f"Поступил запрос: {item=}")
+        # logger.debug(f"Поступил запрос: {item=}")
         brand = item.get('brand', 'No brand found')
         article = item.get('article', 'No article found')
-        logger.debug(f"Выделили: {brand=}, article: {article=}")
+        # logger.debug(f"Выделили: {brand=}, article: {article=}")
 
         # Если в JSON нет необходимых ключей, то возвращаем ошибку
         if not brand or not article:
@@ -60,7 +60,7 @@ def get_image_links():
 
         # Фильтруем имеющиеся данные по полученным параметрам
         list_image = wk_csv.filter(brand=brand, article=article, type_filter='image_link')
-        logger.debug(f"Получили по запросу из БД: {list_image=}")
+        # logger.debug(f"Получили по запросу из БД: {list_image=}")
 
         # Если данные есть добавляем их в ответ на запрос
         if list_image:
@@ -70,6 +70,7 @@ def get_image_links():
                 if article == number[0]:
                     # Добавляем URL без предварительного экранирования
                     response.append({"url": image['url']})
+            logger.info(f"Отправлено изображение для пары brand: {brand}, article: {article}")
 
         # Если данных нет, то возвращаем ошибку
         else:
