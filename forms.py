@@ -15,13 +15,13 @@ class LoginForm(FlaskForm):
     profit_credit = IntegerField("Прибыль от кредита", validators=[DataRequired(message="Заполните поле")])
     comp_suppl = IntegerField("Компенсация от поставщика", validators=[DataRequired(message="Заполните поле")])
     trade_in = RadioField(
-        "Трейд ин", choices=[('Y', 'Да'), ('N', 'Нет')], validators=[DataRequired(message="Заполните поле")]
+        "Трейд ин", choices=['Да', 'Нет'], validators=[DataRequired(message="Заполните поле")]
     )
     credit = RadioField(
-        "Кредит", choices=[('Y', 'Да'), ('N', 'Нет')], validators=[DataRequired(message="Заполните поле")]
+        "Кредит", choices=['Да', 'Нет'], validators=[DataRequired(message="Заполните поле")]
     )
     kasko = RadioField(
-        "КАСКО", choices=[('Y', 'Да'), ('N', 'Нет')], validators=[DataRequired(message="Заполните поле")]
+        "КАСКО", choices=['Да', 'Нет'], validators=[DataRequired(message="Заполните поле")]
     )
 
     date_issue = StringField("Дата выдачи", validators=[DataRequired(message="Заполните поле")])
