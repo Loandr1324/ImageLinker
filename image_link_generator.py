@@ -28,7 +28,12 @@ def get_image_links():
             logger.error("Empty request data")
             abort(400, description="Bad Request: No data provided")
     elif request.content_type == 'application/x-www-form-urlencoded':
-        data = [request.form]  # Оборачиваем form dict в список для унификации обработки
+        # Если полученные данные не являются словарём, то преобразуем ключ в json
+        if request.form.get('brand'):
+            data = [request.form]  # Оборачиваем form dict в список для унификации обработки
+        else:
+            keys_str = list(request.form.keys())[0]
+            data = json.loads(keys_str)
     else:
         abort(400, description="Unsupported Media Type")
 
