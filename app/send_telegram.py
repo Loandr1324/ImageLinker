@@ -1,11 +1,11 @@
 import asyncio
-from aiogram import Bot
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+import telepot
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup
 from config import TOKEN_BOT, CHAT_ID
 
 TOKEN = TOKEN_BOT
-CHATID = CHAT_ID
-bot = Bot(token=TOKEN_BOT)
+CHAT_ID = CHAT_ID
+telegramBot = telepot.Bot(token=TOKEN_BOT)
 # telegramBot = telepot.Bot(TOKEN)
 
 
@@ -72,7 +72,7 @@ def send_message(message: str, keyboard: InlineKeyboardMarkup | ReplyKeyboardMar
     :return:
     """
     try:
-        asyncio.run(bot.send_message(CHATID, message, parse_mode="HTML", reply_markup=keyboard))
+        telegramBot.sendMessage(CHAT_ID, message, parse_mode="HTML", reply_markup=keyboard)
         return True
     except ConnectionError as ce:
         print('Отправка уведомления в телеграм была неудачна. Описание ошибки:')
