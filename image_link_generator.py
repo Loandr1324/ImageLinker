@@ -6,6 +6,7 @@ from loguru import logger
 from config import FILE_NAME_LOG_LINK, FILE_NAME_IMAGE_LINK, SECRET_KEY
 from data.csv_work import WorkCSV
 from forms import LoginForm
+import app.send_telegram as st
 
 # Задаём параметры логирования
 logger.add(FILE_NAME_LOG_LINK,
@@ -90,6 +91,14 @@ def get_image_links():
 def form_deal():
     form = LoginForm()
     if form.validate_on_submit():
+        logger.debug(f"{form.data=}")
+        logger.debug(f"{form.car_model.data=}")
+        logger.debug(f"{form.car_model.id=}")
+        logger.debug(f"{form.car_model.label=}")
+        logger.debug(f"{form.car_model.name=}")
+        logger.debug(f"{form.car_model=}")
+        message, keyboard = st.create_message(form.data)
+        result = st.send_message(message, keyboard)
         # TODO Здесь будет описаны действия с данными заполненной формы.
         #  Отправка в телеграм
         # flash('Login requested for user {}'.format(
