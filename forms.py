@@ -14,15 +14,9 @@ class LoginForm(FlaskForm):
     profit_add_equip = IntegerField("Прибыль с доп оборудования", validators=[DataRequired(message="Заполните поле")])
     profit_credit = IntegerField("Прибыль от кредита", validators=[DataRequired(message="Заполните поле")])
     comp_suppl = IntegerField("Компенсация от поставщика", validators=[DataRequired(message="Заполните поле")])
-    trade_in = RadioField(
-        "Трейд ин", choices=['Да', 'Нет'], validators=[DataRequired(message="Заполните поле")]
-    )
-    credit = RadioField(
-        "Кредит", choices=['Да', 'Нет'], validators=[DataRequired(message="Заполните поле")]
-    )
-    kasko = RadioField(
-        "КАСКО", choices=['Да', 'Нет'], validators=[DataRequired(message="Заполните поле")]
-    )
+    trade_in = RadioField("Трейд ин", choices=['Да', 'Нет'], validators=[DataRequired(message="Заполните поле")])
+    credit = RadioField("Кредит", choices=['Да', 'Нет'], validators=[DataRequired(message="Заполните поле")])
+    kasko = RadioField("КАСКО", choices=['Да', 'Нет'], validators=[DataRequired(message="Заполните поле")])
 
     date_issue = StringField("Дата выдачи", validators=[DataRequired(message="Заполните поле")])
 
