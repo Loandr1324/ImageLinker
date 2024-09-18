@@ -7,23 +7,21 @@
 }
 body {
     font-family: 'docs-Roboto', Helvetica, Arial, sans-serif;
-    font-size: 24pt;
-    background-color: #f0ebf8;
+    background-color: #37393c;
 }
 div {
     clear: both;
     padding: 8px 0;
     overflow: hidden;
-
-
+    font-size: 24pt;
+    color: #b6daff;
 }
 
 form {
-    padding: 30px;
+    padding: 0px 30px;
     font-family: Arial;
     font-size: 13px;
     display: inline-block;
-	background-color: #37393c;
     color: white;
 }
 

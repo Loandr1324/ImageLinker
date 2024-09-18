@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>Новая сделка</div>
+
 <form action="" method="post" novalidate>
+    <div>Новая сделка</div>
     {{ form.hidden_tag() }}
     <p>
         {{ form.manager.label }}<br>
