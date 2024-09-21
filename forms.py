@@ -43,7 +43,7 @@ class LoginForm(FlaskForm):
     profit_car_body = StringField(
         "Прибыль с кузова авто",
         validators=[DataRequired(message="Это обязательный вопрос.")],
-        render_kw={"placeholder": "Мой ответ"},
+        render_kw={"placeholder": "Мой ответ"}
     )
     profit_add_equip = StringField(
         "Прибыль с доп оборудования",
