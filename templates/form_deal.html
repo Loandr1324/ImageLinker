@@ -1,104 +1,160 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="main-body">
+        <div class="main-container">
+            <div class="main-form__hero">
+                <img src="static/img/contract.jpg" alt="сделка">
+            </div>
+            <form action="" method="post" novalidate>
+                <div class="main-form__item main-form__item--head">
+                    <h1 class="main-form__title">Новая сделка</h1>
+                </div>
+                {{ form.hidden_tag() }}
+                <div class="main-form__item">
+                    <label class="required-name" for="manager">Менеджер<span>*</span></label>
+                    {{ form.manager() }}
+                    <span class="line"></span>
+                    {% for error in form.manager.errors %}
+                    <span style="color: red;">*</span>
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item">
+                    <label class="required-name" for="client">ФИО клиента<span>*</span></label>
+                    {{ form.client() }}
+                    <span class="line"></span>
+                    {% for error in form.client.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item">
+                    <label class="required-name" for="car_model">Модель авто<span>*</span></label>
+                    {{ form.car_model() }}
+                    {% for error in form.car_model.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item">
+                    <label class="required-name" for="car_color">Цвет авто<span>*</span></label>
+                    {{ form.car_color() }}
+                    {% for error in form.car_color.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item">
+                    <label class="required-name" for="year_prod">Год выпуска<span>*</span></label>
+                    {{ form.year_prod() }}
+                    {% for error in form.year_prod.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item main-form__item--number">
+                    <label class="required-name"  for="profit_car_body">Прибыль с кузова авто<span>*</span></label>
+                    {{ form.profit_car_body(pattern="^-?\d{1,3}(?: \d{3})*(?:,\d+)?$") }}
+                    <span class="line"></span>
+                    {% for error in form.profit_car_body.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item main-form__item--number">
+                    <label class="required-name"  for="profit_add_equip">Прибыль с доп оборудования<span>*</span></label>
+                    {{ form.profit_add_equip(pattern="^-?\d{1,3}(?: \d{3})*(?:,\d+)?$") }}
+                    <span class="line"></span>
+                    {% for error in form.profit_add_equip.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item main-form__item--number">
+                    <label class="required-name" for="profit_credit">Прибыль от кредита<span>*</span></label>
+                    {{ form.profit_credit(pattern="^-?\d{1,3}(?: \d{3})*(?:,\d+)?$") }}
+                    <span class="line"></span>
+                    {% for error in form.profit_credit.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item main-form__item--number">
+                    <label class="required-name" for="comp_suppl">Компенсация от поставщика<span>*</span></label>
+                    {{ form.comp_suppl(pattern="^-?\d{1,3}(?: \d{3})*(?:,\d+)?$") }}
+                    <span class="line"></span>
+                    {% for error in form.comp_suppl.errors %}
+                        <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item" id="trade_in">
+                    <label class="required-name" for="trade_in">Трейд ин<span>*</span></label>
+                    {{ form.trade_in(class="radio-item") }}
+                    {% for error in form.trade_in.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item" id="credit">
+                    <label  class="required-name" for="credit">Кредит<span>*</span></label>
+                    {{ form.credit(class="radio-item") }}
+                    {% for error in form.credit.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item" id="kasko">
+                    <label class="required-name" for="kasko">КАСКО<span>*</span></label>
+                    {{ form.kasko(class="radio-item") }}
+                    {% for error in form.kasko.errors %}
+                    <div class="main-form__error">
+                        <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="main-form__item">
+                    <label class="required-name" for="date_issue">Дата выдачи<span>*</span></label>
+                    {{ form.date_issue() }}
+                    <span class="line"></span>
+                    {% for error in form.date_issue.errors %}
+                        <div class="main-form__error">
+                            <div class="error-img"><img src="static/img/error.svg" alt=""></div>
+                            <span>{{ error }}</span>
+                        </div>
+                    {% endfor %}
 
-<form action="" method="post" novalidate>
-    <div>Новая сделка</div>
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.manager.label }}<br>
-        {{ form.manager(size=40) }}<br>
-        {% for error in form.manager.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.client.label }}<br>
-        {{ form.client(size=40) }}<br>
-        {% for error in form.client.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.car_model.label }}<br>
-        {{ form.car_model(size=1) }}<br>
-        {% for error in form.car_model.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.car_color.label }}<br>
-        {{ form.car_color(size=1) }}<br>
-        {% for error in form.car_color.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.year_prod.label }}<br>
-        {{ form.year_prod(size=1) }}<br>
-        {% for error in form.year_prod.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.profit_car_body.label }}<br>
-        {{ form.profit_car_body(size=20) }}<br>
-        {% for error in form.profit_car_body.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.profit_add_equip.label }}<br>
-        {{ form.profit_add_equip(size=20) }}<br>
-        {% for error in form.profit_add_equip.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.profit_credit.label }}<br>
-        {{ form.profit_credit(size=20) }}<br>
-        {% for error in form.profit_credit.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.comp_suppl.label }}<br>
-        {{ form.comp_suppl(size=20) }}<br>
-        {% for error in form.comp_suppl.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.trade_in.label }}
-        {{ form.trade_in() }}<br>
-        {% for error in form.trade_in.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <br>
-    <p>
-        {{ form.credit.label }}
-        {{ form.credit(size=20) }}<br>
-        {% for error in form.credit.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <br>
-    <p>
-        {{ form.kasko.label }}
-        {{ form.kasko() }}<br>
-        {% for error in form.kasko.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <br>
-    <p>
-        {{ form.date_issue.label }}<br>
-        {{ form.date_issue(size=40) }}<br>
-        {% for error in form.date_issue.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </p>
-    <p>{{ form.submit() }}</p>
-</form>
+                </div>
+                <div class="main-form__submit">
+                    {{ form.submit() }}
+                    {{ form.cleare(class="main-form__cleare") }}
+                </div>
+            </form>
+    </div>
+</div>
 {% endblock %}
