@@ -90,16 +90,16 @@ def get_image_links():
 @app.route('/form_deal', methods=['GET', 'POST'])
 def form_deal():
     form = LoginForm()
-    form.manager.data = request.args.get('manager')
+    form.manager.data = request.args.get('manager') or form.manager.data
     logger.debug(f"{form.data=}")
     if form.cleare.data:
-        return redirect(f'/form_deal?manger={form.manager.data}')
+        return redirect(f'/form_deal?manager={form.manager.data}')
     if form.validate_on_submit():
         # Отправляем сообщение в телеграм с данными из формы
         message, keyboard = st.create_message(form.data)
         result = st.send_message(message, keyboard)
         if result:
-            return redirect(f'/form_deal?name={form.manager.data}')
+            return redirect(f'/form_deal?manager={form.manager.data}')
         else:
             flash("Форма не была отправлена в телеграм. Убедитесь, что работает телеграм и отправьте заново.\n"
                   "Если ошибка повторяется, то обратитесь к администратору")
