@@ -25,25 +25,31 @@ class DatabaseConnector:
         except Error as e:
             logger.error(f"Ошибка при подключении к MySQL: {e}")
 
-    def insert_row(self, table_name, data: dict) -> None or int:
+    def insert_row(self, table_name, data_deal: dict) -> None or int:
         """
         Записываем строку в базу данных
         :param table_name: Имя таблицы в базе данных
-        :param data: словарь с данными для записи
+        :param data_deal: словарь с данными для записи
         :return:
         """
         columns_names = [
             "manager", "client", "car_model", "car_color", "year_prod", "profit_car_body", "profit_add_equip",
             "profit_credit", "comp_suppl", "trade_in", "credit", "kasko", "profit", "date_issue"
         ]
+        columns_names_int = ["profit_car_body", "profit_add_equip", "profit_credit", "comp_suppl", "profit"]
         # Задаём статус по умолчанию
         columns_query = 'status,'
         values_query = '"новая", '
 
         # Дополняем строки наименования столбцов таблицы и их значений
         for item in columns_names:
+            # Удаляем разделение разрядов по числовым данным
+            if item in columns_names_int:
+                data_deal[item] = data_deal[item].replace(' ', '')
+            # Добавляем наименование колонки в строку
             columns_query += f' {item},'
-            values_query += f' "{data[item]}",'
+            # Добавляем значение соответствующей колонки в строку
+            values_query += f' "{data_deal[item]}",'
 
         # Формируем текст запроса для записи строки в БД
         text_query = f"INSERT INTO {table_name} ({columns_query[:-1]}) VALUES({values_query[:-1]});"
