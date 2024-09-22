@@ -3,10 +3,11 @@ from flask import Flask, request, jsonify, abort, Response, render_template, fla
 import json
 from flask_cors import CORS
 from loguru import logger
-from config import FILE_NAME_LOG_LINK, FILE_NAME_IMAGE_LINK, SECRET_KEY
+from config import FILE_NAME_LOG_LINK, FILE_NAME_IMAGE_LINK, SECRET_KEY, AUTH_mySQL
 from data.csv_work import WorkCSV
 from forms import LoginForm
 import app.send_telegram as st
+from app.bd_work import DatabaseConnector
 
 # Задаём параметры логирования
 logger.add(FILE_NAME_LOG_LINK,
@@ -91,20 +92,71 @@ def get_image_links():
 def form_deal():
     form = LoginForm()
     form.manager.data = request.args.get('manager') or form.manager.data
-    logger.debug(f"{form.data=}")
     if form.cleare.data:
         return redirect(f'/form_deal?manager={form.manager.data}')
+
     if form.validate_on_submit():
-        # Отправляем сообщение в телеграм с данными из формы
-        message, keyboard = st.create_message(form.data)
-        result = st.send_message(message, keyboard)
-        if result:
+        # Рассчитываем прибыль по сделке
+        deal_data = form.data.copy()
+        deal_data['profit'] = profit_calculation(form.data)
+
+        # Записываем в БД данные о сделке
+        id_row = save_db(deal_data)
+
+        # Отправляем сообщение в телеграм, если запись в БД прошла успешно
+        if id_row:
+            deal_data['id_row'] = id_row
+            # Отправляем сообщение в телеграм с данными из формы
+            message, keyboard = st.create_message(deal_data)
+            result_tg = st.send_message(message, keyboard)
+        else:
+            result_tg = False
+
+        # Контролируем результат выполнения
+        if id_row and result_tg:
             return redirect(f'/form_deal?manager={form.manager.data}')
         else:
             flash("Форма не была отправлена в телеграм. Убедитесь, что работает телеграм и отправьте заново.\n"
                   "Если ошибка повторяется, то обратитесь к администратору")
 
     return render_template('form_deal.html', form=form)
+
+
+def profit_calculation(data: dict) -> str:
+    """
+    Рассчитываем прибыль по сделке
+    :param data: Словарь с ключами
+        {'profit_car_body': str,
+        'profit_add_equip': str,
+        'profit_credit': str,
+        'comp_suppl', str}
+    :return: Возвращаем сумму в виде строки разделённую по разрядам. Например: "12 681 682"
+    """
+    profit_car_body = data.get('profit_car_body').replace(' ', '')
+    profit_add_equip = data.get('profit_add_equip').replace(' ', '')
+    profit_credit = data.get('profit_credit').replace(' ', '')
+    comp_suppl = data.get('comp_suppl').replace(' ', '')
+    profit = int(profit_car_body) + int(profit_add_equip) + int(profit_credit) + int(comp_suppl)
+    return '{0:,}'.format(profit).replace(',', ' ')
+
+
+def save_db(data: dict) -> None or int:
+    """
+    Записываем данные о сделки в базу данных
+    :param data:
+    :return: результат записи в базу БД
+    """
+    # Записываем данные по сделке в БД
+    db_connector = DatabaseConnector(
+        host=AUTH_mySQL['host'],
+        database=AUTH_mySQL['database'],
+        user=AUTH_mySQL['user'],
+        password=AUTH_mySQL['password']
+    )
+    db_connector.connect()
+    result = db_connector.insert_row("sa_deal", data)
+    db_connector.close_connection()
+    return result
 
 
 if __name__ == '__main__':
