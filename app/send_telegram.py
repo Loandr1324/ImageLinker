@@ -60,7 +60,7 @@ def create_message(data: dict) -> (str, InlineKeyboardMarkup):
     text = generate_text_for_deal(data)
     # Генерируем клавиатуру
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🟢 Согласовать", callback_data=f"approve_id{data.get('id_row')}"),
+        [InlineKeyboardButton(text="🟢 Согласовать", callback_data=f"approve_{data.get('id_row')}"),
          InlineKeyboardButton(text="🔴 Отклонить", callback_data=f"reject_id{data.get('id_row')}")]
     ])
     return text, keyboard
