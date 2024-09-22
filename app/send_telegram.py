@@ -8,6 +8,31 @@ CHAT_ID = CHAT_ID
 telegramBot = telepot.Bot(token=TOKEN_BOT)
 
 
+def generate_text_for_deal(data: dict) -> str:
+    """
+    Генерируем текст сообщения по сделке для отправки в телеграмм
+    :param data:
+    :return: str - строка с текстом сообщения
+    """
+    # return f"""🟡 @Monareich, Просьба согласовать:  # TODO Исправить ссылку на менеджера
+    return f"""🟡 Monareich, Просьба согласовать:
+    Менеджер: {data.get('manager')}
+    {data.get('client')}
+    {data.get('car_model')}
+    Цвет: {data.get('car_color')}
+    Год: {data.get('year_prod')}
+    Ж: {data.get('profit_car_body')}
+    О: {data.get('profit_add_equip')}
+    К: {data.get('profit_credit')}
+    Компенсация: {data.get('comp_suppl')}
+    Трейд-ин: {data.get('trade_in')}
+    Кредит: {data.get('credit')}
+    КАСКО: {data.get('kasko')}
+    Итого = {data.get('profit')}
+    Выдача: {data.get('date_issue')}
+    """
+
+
 def create_message(data: dict) -> (str, InlineKeyboardMarkup):
     """
     Генерирует текст сообщения
@@ -32,11 +57,11 @@ def create_message(data: dict) -> (str, InlineKeyboardMarkup):
         строка с текстом сообщения и добавленной инлайн клавиатурой,
         экземпляр класса InlineKeyboardMarkup с инлайн клавиатурой
     """
-    data['profit'] = profit_calculation(data)
     text = generate_text_for_deal(data)
+    # Генерируем клавиатуру
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🟢 Согласовать", callback_data=f"approve"),
-         InlineKeyboardButton(text="🔴 Отклонить", callback_data=f"reject")],
+        [InlineKeyboardButton(text="🟢 Согласовать", callback_data=f"approve_{data.get('id_row')}"),
+         InlineKeyboardButton(text="🔴 Отклонить", callback_data=f"reject_{data.get('id_row')}")]
     ])
     return text, keyboard
 
@@ -57,44 +82,4 @@ def send_message(message: str, keyboard: InlineKeyboardMarkup | ReplyKeyboardMar
         return False
 
 
-def profit_calculation(data: dict) -> str:
-    """
-    Рассчитываем прибыль по сделке
-    :param data: Словарь с ключами
-        {'profit_car_body': str,
-        'profit_add_equip': str,
-        'profit_credit': str,
-        'comp_suppl', str}
-    :return: Возвращаем сумму в виде строки разделённую по разрядам. Например: "12 681 682"
-    """
-    profit_car_body = data.get('profit_car_body').replace(' ', '')
-    profit_add_equip = data.get('profit_add_equip').replace(' ', '')
-    profit_credit = data.get('profit_credit').replace(' ', '')
-    comp_suppl = data.get('comp_suppl').replace(' ', '')
-    profit = int(profit_car_body) + int(profit_add_equip) + int(profit_credit) + int(comp_suppl)
-    return '{0:,}'.format(profit).replace(',', ' ')
 
-
-def generate_text_for_deal(data: dict) -> str:
-    """
-    Генерируем текст сообщения по сделке для отправки в телеграмм
-    :param data:
-    :return: str - строка с текстом сообщения
-    """
-    # return f"""🟡 @Monareich, Просьба согласовать:  # TODO Исправить ссылку на менеджера
-    return f"""🟡 Monareich, Просьба согласовать:
-    Менеджер: {data.get('manager')}
-    {data.get('client')}
-    {data.get('car_model')}
-    Цвет: {data.get('car_color')}
-    Год: {data.get('year_prod')}
-    Ж: {data.get('profit_car_body')}
-    О: {data.get('profit_add_equip')}
-    К: {data.get('profit_credit')}
-    Компенсация: {data.get('comp_suppl')}
-    Трейд-ин: {data.get('trade_in')}
-    Кредит: {data.get('credit')}
-    КАСКО: {data.get('kasko')}
-    Итого = {data.get('profit')}
-    Выдача: {data.get('date_issue')}
-    """
