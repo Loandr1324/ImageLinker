@@ -1,5 +1,5 @@
 # Author Loik Andrey mail: loikand@mail.ru
-from flask import Flask, request, jsonify, abort, Response, render_template, flash, redirect
+from flask import Flask, request, abort, Response, render_template, flash, redirect
 import json
 from flask_cors import CORS
 from loguru import logger
@@ -7,7 +7,7 @@ from config import FILE_NAME_LOG_LINK, FILE_NAME_IMAGE_LINK, SECRET_KEY, AUTH_my
 from data.csv_work import WorkCSV
 from forms import LoginForm
 import app.send_telegram as st
-from app.bd_work import DatabaseConnector
+from app.db_work import DatabaseConnector
 
 # Задаём параметры логирования
 logger.add(FILE_NAME_LOG_LINK,
