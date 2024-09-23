@@ -116,7 +116,7 @@ class DatabaseConnector:
 
 # Пример для тестирования
 if __name__ == "__main__":
-    data = {'manager': 'тестМ2', 'client': 'тестК', 'car_model': 'CS55PLUS', 'car_color': 'Черный', 'year_prod': '2024', 'profit_car_body': '1', 'profit_add_equip': '1', 'profit_credit': '1', 'comp_suppl': '1', 'trade_in': 'Да', 'credit': 'Нет', 'kasko': 'Да', 'date_issue': 'сегодня', 'submit': True, 'cleare': False, 'csrf_token': 'ImQxNTJjYzA3NWRhYWU5ZTE4MmRlMjFlOTZjOTQwODBlNzY3ZDNjMDci.Zu_UHQ.XfZKYYKELOJ2Avxqjfnudcn6064', 'profit': '4'}
+    data = {}
     from config import AUTH_mySQL
 
     db_connector = DatabaseConnector(
