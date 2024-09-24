@@ -14,8 +14,7 @@ def generate_text_for_deal(data: dict) -> str:
     :param data:
     :return: str - строка с текстом сообщения
     """
-    # return f"""🟡 @Monareich, Просьба согласовать:  # TODO Исправить ссылку на менеджера
-    return f"""🟡 Monareich, Просьба согласовать:
+    return f"""🟡 @Monareich, Просьба согласовать:
     Менеджер: {data.get('manager')}
     {data.get('client')}
     {data.get('car_model')}
