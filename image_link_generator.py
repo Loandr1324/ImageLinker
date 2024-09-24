@@ -114,10 +114,10 @@ def form_deal():
 
         # Контролируем результат выполнения
         if id_row and result_tg:
-            # return redirect(f'/form_deal?manager={form.manager.data}')
+            return redirect(f'/form_deal?manager={form.manager.data}')
             # return redirect(f'https://t.me/chng_sale_deal_bot')
             # return redirect(f'https://t.me/+zLWXBFPLmAw4MTg6')
-            return redirect(f'tg:resolve')
+            # return redirect(f'tg:resolve')
         else:
             flash("Форма не была отправлена в телеграм. Убедитесь, что работает телеграм и отправьте заново.\n"
                   "Если ошибка повторяется, то обратитесь к администратору")
