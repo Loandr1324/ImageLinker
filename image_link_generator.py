@@ -101,7 +101,7 @@ def form_deal():
         deal_data['profit'] = profit_calculation(form.data)
 
         # Записываем в БД данные о сделке
-        id_row = save_db(deal_data)
+        id_row = save_db(deal_data.copy())
 
         # Отправляем сообщение в телеграм, если запись в БД прошла успешно
         if id_row:
