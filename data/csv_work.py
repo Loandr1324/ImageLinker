@@ -54,7 +54,9 @@ class WorkCSV:
         """
         if kwargs['type_filter'] == 'image_link':
             return list(filter(
-                lambda v: v["brand"] == kwargs['brand'] and kwargs['article'] in v["number"], self._data
+                lambda v:
+                v["brand"].lower() == kwargs['brand'].lower()
+                and kwargs['article'].lower() in v["number"].lower(), self._data
             ))
 
         else:
