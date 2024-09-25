@@ -62,6 +62,7 @@ def get_image_links():
 
         # Фильтруем имеющиеся данные по полученным параметрам
         list_image = wk_csv.filter(brand=brand, article=article, type_filter='image_link')
+        list_image = sorted(list_image, key=lambda x: x['url'])  # сортируем по значению ключа url
         # logger.debug(f"Получили по запросу из БД: {list_image=}")
 
         # Если данные есть добавляем их в ответ на запрос
