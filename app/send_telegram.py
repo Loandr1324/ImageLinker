@@ -14,7 +14,7 @@ def generate_text_for_deal(data: dict) -> str:
     :param data:
     :return: str - строка с текстом сообщения
     """
-    return f"""🟡 @Monareich, Просьба согласовать:
+    return f"""🟡 @Monareich, Просьба согласовать: # TODO Раскомментировать
     Менеджер: {data.get('manager')}
     {data.get('client')}
     {data.get('car_model')}
@@ -65,8 +65,9 @@ def create_message(data: dict) -> (str, InlineKeyboardMarkup):
     return text, keyboard
 
 
-def send_message(message: str, keyboard: InlineKeyboardMarkup | ReplyKeyboardMarkup) -> bool:
+def send_message1(message: str, keyboard: InlineKeyboardMarkup | ReplyKeyboardMarkup) -> bool:
     """
+    # TODO Удалить после тестов
     Отправка сообщения в чат телеграм
     :param message: сообщение
     :param keyboard: экземпляр класса клавиатуры для телеграм
@@ -81,4 +82,27 @@ def send_message(message: str, keyboard: InlineKeyboardMarkup | ReplyKeyboardMar
         return False
 
 
-
+def send_message(
+        message: str,
+        keyboard: InlineKeyboardMarkup | ReplyKeyboardMarkup,
+        message_id: str | int,
+        chat_id: str | int
+) -> bool:
+    """
+    Отправка сообщения в чат телеграм
+    :param message: Текст сообщения
+    :param keyboard: Инланй или Репли клавиатура
+    :param message_id: Идентификатор сообщения в чате
+    :param chat_id: Чат в котором находится сообщение
+    :return: Результат выполнения
+    """
+    try:
+        chat_id = chat_id or CHAT_ID
+        telegramBot.sendMessage(
+            chat_id, message, parse_mode="HTML", reply_markup=keyboard, reply_to_message_id=message_id
+        )
+        return True
+    except ConnectionError as ce:
+        logger.error('Отправка уведомления в телеграм была неудачна. Описание ошибки:')
+        logger.error(ce)
+        return False
