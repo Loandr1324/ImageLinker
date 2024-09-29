@@ -1,10 +1,47 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, RadioField, validators
 from wtforms.validators import DataRequired
-from config import CAR_MODEL, CAR_COLOR, YEAR_PROD
+from app.db_work import DatabaseConnector
+from config import AUTH_mySQL
+from loguru import logger
+
+
+def get_field_value() -> (list, list, list):
+    """
+    Формируем значение полей формы
+    :return:
+    """
+    # Формируем значения полей из БД
+    car_model_value, car_color_value, years_prod = [], [], []
+    for item in get_table_from_db():
+        car_model_value.append(item['car_model']) if item['car_model'] else None
+        car_color_value.append(item['car_color']) if item['car_color'] else None
+        years_prod.append(item['years_production'].split('.')[0]) if item['years_production'] else None
+
+    return car_model_value, car_color_value, years_prod
+
+
+def get_table_from_db() -> list[dict]:
+    """
+    Получаем данные из таблицы БД со значениями форм полей
+    :return: таблица словарей со строками БД
+    """
+    db_connector = DatabaseConnector(
+        host=AUTH_mySQL['host'],
+        database=AUTH_mySQL['database'],
+        user=AUTH_mySQL['user'],
+        password=AUTH_mySQL['password']
+    )
+    db_connector.connect()
+    table_from_db = db_connector.fetch_all_positions("sa_cfg_form_deal")
+    db_connector.close_connection()
+
+    return table_from_db
 
 
 class LoginForm(FlaskForm):
+    # Получаем значения полей выбора из БД
+    car_model_value, car_color_value, year_prod_value = get_field_value()
     manager = StringField(
         "Менеджер",
         validators=[DataRequired(message="Это обязательный вопрос.")],
@@ -18,7 +55,7 @@ class LoginForm(FlaskForm):
     )
     car_model = SelectField(
         "Модель авто",
-        choices=CAR_MODEL,
+        choices=car_model_value,
         validators=[
             DataRequired(message="Это обязательный вопрос."),
             validators.Regexp(r'[^Выбрать]+', message='Это обязательный вопрос.')
@@ -26,7 +63,7 @@ class LoginForm(FlaskForm):
     )
     car_color = SelectField(
         "Цвет авто",
-        choices=CAR_COLOR,
+        choices=car_color_value,
         validators=[
             DataRequired(message="Это обязательный вопрос."),
             validators.Regexp(r'[^Выбрать]+', message='Это обязательный вопрос.')
@@ -34,7 +71,7 @@ class LoginForm(FlaskForm):
     )
     year_prod = SelectField(
         "Год выпуска",
-        choices=YEAR_PROD,
+        choices=year_prod_value,
         validators=[
             DataRequired(message="Это обязательный вопрос."),
             validators.Regexp(r'[^Выбрать]+', message='Это обязательный вопрос.')
@@ -81,5 +118,6 @@ class LoginForm(FlaskForm):
     cleare = SubmitField('Очистить форму')
 
 
-
-
+if __name__ == "__main__":
+    # get_field_value()
+    pass
