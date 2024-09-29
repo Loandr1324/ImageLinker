@@ -179,7 +179,7 @@ def get_field_value() -> (list, list, list):
     :return:
     """
     # Формируем значения полей из БД
-    car_model_value, car_color_value, years_prod = [], [], []
+    car_model_value, car_color_value, years_prod = ['Выбрать'], ['Выбрать'], ['Выбрать']
     for item in get_table_from_db():
         car_model_value.append(item['car_model']) if item['car_model'] else None
         car_color_value.append(item['car_color']) if item['car_color'] else None
