@@ -219,19 +219,19 @@ def set_default_form_values(form: LoginForm, args) -> None:
     """
     # Устанавливаем значения поля менеджера из параметров запроса
     form.manager.data = request.args.get('manager') or form.manager.data
-    form.client.data = request.args.get('client') or form.manager.data
-    form.car_model.data = request.args.get('car_model') or form.manager.data
-    form.car_color.data = request.args.get('car_color') or form.manager.data
-    form.client.data = request.args.get('client') or form.manager.data
-    form.year_prod.data = request.args.get('year_prod') or form.manager.data
-    form.profit_car_body.data = request.args.get('profit_car_body') or form.manager.data
-    form.profit_add_equip.data = request.args.get('profit_add_equip') or form.manager.data
-    form.profit_credit.data = request.args.get('profit_credit') or form.manager.data
-    form.comp_suppl.data = request.args.get('comp_suppl') or form.manager.data
-    form.trade_in.data = request.args.get('trade_in') or form.manager.data
-    form.credit.data = request.args.get('credit') or form.manager.data
-    form.kasko.data = request.args.get('kasko') or form.manager.data
-    form.date_issue.data = request.args.get('date_issue') or form.manager.data
+    form.client.data = request.args.get('client') or form.client.data
+    form.car_model.data = request.args.get('car_model') or form.car_model.data
+    form.car_color.data = request.args.get('car_color') or form.car_color.data
+    form.client.data = request.args.get('client') or form.client.data
+    form.year_prod.data = request.args.get('year_prod') or form.year_prod.data
+    form.profit_car_body.data = request.args.get('profit_car_body') or form.profit_car_body.data
+    form.profit_add_equip.data = request.args.get('profit_add_equip') or form.profit_add_equip.data
+    form.profit_credit.data = request.args.get('profit_credit') or form.profit_credit.data
+    form.comp_suppl.data = request.args.get('comp_suppl') or form.comp_suppl.data
+    form.trade_in.data = request.args.get('trade_in') or form.trade_in.data
+    form.credit.data = request.args.get('credit') or form.credit.data
+    form.kasko.data = request.args.get('kasko') or form.kasko.data
+    form.date_issue.data = request.args.get('date_issue') or form.date_issue.data
 
 
 def set_choices_select_field_value(form: LoginForm) -> None:
