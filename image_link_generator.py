@@ -99,7 +99,7 @@ def form_deal():
     form.manager.data = request.args.get('manager') or form.manager.data
 
     # Задаём значение полей
-    form.car_model.choices = car_color_value
+    form.car_model.choices = car_model_value
     form.car_color.choices = car_color_value
     form.year_prod.choices = year_prod_value
 
