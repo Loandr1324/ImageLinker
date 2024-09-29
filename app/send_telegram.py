@@ -65,23 +65,6 @@ def create_message(data: dict) -> (str, InlineKeyboardMarkup):
     return text, keyboard
 
 
-def send_message1(message: str, keyboard: InlineKeyboardMarkup | ReplyKeyboardMarkup) -> bool:
-    """
-    # TODO Удалить после тестов
-    Отправка сообщения в чат телеграм
-    :param message: сообщение
-    :param keyboard: экземпляр класса клавиатуры для телеграм
-    :return: bool - результат отправки
-    """
-    try:
-        telegramBot.sendMessage(CHAT_ID, message, parse_mode="HTML", reply_markup=keyboard)
-        return True
-    except ConnectionError as ce:
-        logger.error('Отправка уведомления в телеграм была неудачна. Описание ошибки:')
-        logger.error(ce)
-        return False
-
-
 def send_message(
         message: str,
         keyboard: InlineKeyboardMarkup | ReplyKeyboardMarkup,
