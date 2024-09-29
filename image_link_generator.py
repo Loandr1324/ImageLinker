@@ -91,8 +91,18 @@ def get_image_links():
 
 @app.route('/form_deal', methods=['GET', 'POST'])
 def form_deal():
+    # Получаем значения полей выбора из БД
+    car_model_value, car_color_value, year_prod_value = get_field_value()
+
     form = LoginForm()
+    # Устанавливаем значения поля менеджера из параметров запроса
     form.manager.data = request.args.get('manager') or form.manager.data
+
+    # Задаём значение полей
+    form.car_model.choices = car_color_value
+    form.car_color.choices = car_color_value
+    form.year_prod.choices = year_prod_value
+
     if form.cleare.data:
         return redirect(f'/form_deal?manager={form.manager.data}')
 
@@ -161,6 +171,39 @@ def save_db(data: dict) -> None or int:
     result = db_connector.insert_row("sa_deal", data)
     db_connector.close_connection()
     return result
+
+
+def get_field_value() -> (list, list, list):
+    """
+    Формируем значение полей формы
+    :return:
+    """
+    # Формируем значения полей из БД
+    car_model_value, car_color_value, years_prod = [], [], []
+    for item in get_table_from_db():
+        car_model_value.append(item['car_model']) if item['car_model'] else None
+        car_color_value.append(item['car_color']) if item['car_color'] else None
+        years_prod.append(item['years_production'].split('.')[0]) if item['years_production'] else None
+
+    return car_model_value, car_color_value, years_prod
+
+
+def get_table_from_db() -> list[dict]:
+    """
+    Получаем данные из таблицы БД со значениями форм полей
+    :return: таблица словарей со строками БД
+    """
+    db_connector = DatabaseConnector(
+        host=AUTH_mySQL['host'],
+        database=AUTH_mySQL['database'],
+        user=AUTH_mySQL['user'],
+        password=AUTH_mySQL['password']
+    )
+    db_connector.connect()
+    table_from_db = db_connector.fetch_all_positions("sa_cfg_form_deal")
+    db_connector.close_connection()
+
+    return table_from_db
 
 
 if __name__ == '__main__':
