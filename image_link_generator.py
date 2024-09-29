@@ -91,21 +91,20 @@ def get_image_links():
 
 @app.route('/form_deal', methods=['GET', 'POST'])
 def form_deal():
-    # Получаем значения полей выбора из БД
-    car_model_value, car_color_value, year_prod_value = get_field_value()
-
+    # Создаём экземпляр формы с полями
     form = LoginForm()
-    # Устанавливаем значения поля менеджера из параметров запроса
-    form.manager.data = request.args.get('manager') or form.manager.data
 
-    # Задаём значение полей
-    form.car_model.choices = car_model_value
-    form.car_color.choices = car_color_value
-    form.year_prod.choices = year_prod_value
+    # # Заполняем поля формы полученными параметрами
+    set_default_form_values(form, request)
 
+    # Задаём значение полей из БД
+    set_choices_select_field_value(form)
+
+    # Действие при нажатии кнопки "Очистить форму"
     if form.cleare.data:
         return redirect(f'/form_deal?manager={form.manager.data}')
 
+    # Проверка полей при нажатии кнопки "Отправить на согласование" и проверки их на заполнение
     if form.validate_on_submit():
         # Рассчитываем прибыль по сделке
         deal_data = form.data.copy()
@@ -117,9 +116,14 @@ def form_deal():
         # Отправляем сообщение в телеграм, если запись в БД прошла успешно
         if id_row:
             deal_data['id_row'] = id_row
+
+            # Проверяем запрос на пересогласование
+            message_id = request.args.get('message_id')
+            chat_id = request.args.get('chat_id')
+
             # Отправляем сообщение в телеграм с данными из формы
             message, keyboard = st.create_message(deal_data)
-            result_tg = st.send_message(message, keyboard)
+            result_tg = st.send_message(message, keyboard, message_id, chat_id)
         else:
             result_tg = False
 
@@ -204,6 +208,43 @@ def get_table_from_db() -> list[dict]:
     db_connector.close_connection()
 
     return table_from_db
+
+
+def set_default_form_values(form: LoginForm, args) -> None:
+    """
+    Предварительно заполняем поля формы
+    :param form: Экземпляр класс LoginForm с заданными полями
+    :param args: Входящие параметры запроса
+    :return:
+    """
+    # Устанавливаем значения поля менеджера из параметров запроса
+    form.manager.data = request.args.get('manager') or form.manager.data
+    form.client.data = request.args.get('client')
+    form.car_model.data = request.args.get('car_model')
+    form.car_color.data = request.args.get('car_color')
+    form.client.data = request.args.get('client')
+    form.year_prod.data = request.args.get('year_prod')
+    form.profit_car_body.data = request.args.get('profit_car_body')
+    form.profit_add_equip.data = request.args.get('profit_add_equip')
+    form.profit_credit.data = request.args.get('profit_credit')
+    form.comp_suppl.data = request.args.get('comp_suppl')
+    form.trade_in.data = request.args.get('trade_in')
+    form.credit.data = request.args.get('credit')
+    form.kasko.data = request.args.get('kasko')
+    form.date_issue.data = request.args.get('date_issue')
+
+
+def set_choices_select_field_value(form: LoginForm) -> None:
+    """
+    Задаём списки выбора полей SelectField
+    :param form: Экземпляр класс LoginForm с заданными полями
+    :return:
+    """
+    # Получаем значения полей выбора из БД
+    car_model_value, car_color_value, year_prod_value = get_field_value()
+    form.car_model.choices = car_model_value
+    form.car_color.choices = car_color_value
+    form.year_prod.choices = year_prod_value
 
 
 if __name__ == '__main__':
