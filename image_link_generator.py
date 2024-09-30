@@ -233,6 +233,10 @@ def set_default_form_values(form: LoginForm, args) -> None:
     form.kasko.data = request.args.get('kasko') or form.kasko.data
     form.date_issue.data = request.args.get('date_issue') or form.date_issue.data
 
+    # Меняем наименование кнопки при пересогласовании
+    if request.args.get('message_id'):
+        form.submit.data = "Отправить на пересогласование"
+
 
 def set_choices_select_field_value(form: LoginForm) -> None:
     """
@@ -245,6 +249,7 @@ def set_choices_select_field_value(form: LoginForm) -> None:
     form.car_model.choices = car_model_value
     form.car_color.choices = car_color_value
     form.year_prod.choices = year_prod_value
+
 
 
 if __name__ == '__main__':
