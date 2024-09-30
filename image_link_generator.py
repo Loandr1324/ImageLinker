@@ -235,7 +235,7 @@ def set_default_form_values(form: LoginForm, args) -> None:
 
     # Меняем наименование кнопки при пересогласовании
     if request.args.get('message_id'):
-        form.submit.data = "Отправить на пересогласование"
+        form.submit.label.text = "Отправить на пересогласование"
 
 
 def set_choices_select_field_value(form: LoginForm) -> None:
