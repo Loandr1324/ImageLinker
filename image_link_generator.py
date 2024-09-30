@@ -251,6 +251,5 @@ def set_choices_select_field_value(form: LoginForm) -> None:
     form.year_prod.choices = year_prod_value
 
 
-
 if __name__ == '__main__':
     app.run()
