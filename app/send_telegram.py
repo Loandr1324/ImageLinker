@@ -15,20 +15,20 @@ def generate_text_for_deal(data: dict) -> str:
     :return: str - строка с текстом сообщения
     """
     return f"""🟡 @Monareich, Просьба согласовать:
-    Менеджер: {data.get('manager')}
-    {data.get('client')}
-    {data.get('car_model')}
-    Цвет: {data.get('car_color')}
-    Год: {data.get('year_prod')}
-    Ж: {data.get('profit_car_body')}
-    О: {data.get('profit_add_equip')}
-    К: {data.get('profit_credit')}
-    Компенсация: {data.get('comp_suppl')}
-    Трейд-ин: {data.get('trade_in')}
-    Кредит: {data.get('credit')}
-    КАСКО: {data.get('kasko')}
-    Итого = {data.get('profit')}
-    Выдача: {data.get('date_issue')}
+    Менеджер: <b>{data.get('manager')}</b>
+    Клиент: <b>{data.get('client')}</b>
+    А/м: <b>{data.get('car_model')}</b>
+    Цвет: <b>{data.get('car_color')}</b>
+    Год: <b>{data.get('year_prod')}</b>
+    Ж: <b>{data.get('profit_car_body')}</b>
+    О: <b>{data.get('profit_add_equip')}</b>
+    К: <b>{data.get('profit_credit')}</b>
+    Компенсация: <b>{data.get('comp_suppl')}</b>
+    Трейд-ин: <b>{data.get('trade_in')}</b>
+    Кредит: <b>{data.get('credit')}</b>
+    КАСКО: <b>{data.get('kasko')}</b>
+    <u>Итого = <b>{data.get('profit')}</b></u>
+    Выдача: <b>{data.get('date_issue')}</b>
     """
 
 
