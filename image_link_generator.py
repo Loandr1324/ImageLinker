@@ -210,31 +210,34 @@ def get_table_from_db() -> list[dict]:
     return table_from_db
 
 
-def set_default_form_values(form: LoginForm, args) -> None:
+def set_default_form_values(form: LoginForm, req) -> None:
     """
     Предварительно заполняем поля формы
     :param form: Экземпляр класс LoginForm с заданными полями
-    :param args: Входящие параметры запроса
+    :param req: Входящие параметры запроса
     :return:
     """
+    for item in req.args:
+        req.args[item].replace('%20', ' ')
+
     # Устанавливаем значения поля менеджера из параметров запроса
-    form.manager.data = request.args.get('manager') or form.manager.data
-    form.client.data = request.args.get('client') or form.client.data
-    form.car_model.data = request.args.get('car_model') or form.car_model.data
-    form.car_color.data = request.args.get('car_color') or form.car_color.data
-    form.client.data = request.args.get('client') or form.client.data
-    form.year_prod.data = request.args.get('year_prod') or form.year_prod.data
-    form.profit_car_body.data = request.args.get('profit_car_body') or form.profit_car_body.data
-    form.profit_add_equip.data = request.args.get('profit_add_equip') or form.profit_add_equip.data
-    form.profit_credit.data = request.args.get('profit_credit') or form.profit_credit.data
-    form.comp_suppl.data = request.args.get('comp_suppl') or form.comp_suppl.data
-    form.trade_in.data = request.args.get('trade_in') or form.trade_in.data
-    form.credit.data = request.args.get('credit') or form.credit.data
-    form.kasko.data = request.args.get('kasko') or form.kasko.data
-    form.date_issue.data = request.args.get('date_issue') or form.date_issue.data
+    form.manager.data = req.args.get('manager') or form.manager.data
+    form.client.data = req.args.get('client') or form.client.data
+    form.car_model.data = req.args.get('car_model') or form.car_model.data
+    form.car_color.data = req.args.get('car_color') or form.car_color.data
+    form.client.data = req.args.get('client') or form.client.data
+    form.year_prod.data = req.args.get('year_prod') or form.year_prod.data
+    form.profit_car_body.data = req.args.get('profit_car_body') or form.profit_car_body.data
+    form.profit_add_equip.data = req.args.get('profit_add_equip') or form.profit_add_equip.data
+    form.profit_credit.data = req.args.get('profit_credit') or form.profit_credit.data
+    form.comp_suppl.data = req.args.get('comp_suppl') or form.comp_suppl.data
+    form.trade_in.data = req.args.get('trade_in') or form.trade_in.data
+    form.credit.data = req.args.get('credit') or form.credit.data
+    form.kasko.data = req.args.get('kasko') or form.kasko.data
+    form.date_issue.data = req.args.get('date_issue') or form.date_issue.data
 
     # Меняем наименование кнопки при пересогласовании
-    if request.args.get('message_id'):
+    if req.args.get('message_id'):
         form.submit.label.text = "Отправить на пересогласование"
 
 
