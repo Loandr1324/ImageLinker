@@ -94,9 +94,6 @@ def form_deal():
     # Создаём экземпляр формы с полями
     form = LoginForm()
 
-    # # Заполняем поля формы полученными параметрами
-    set_default_form_values(form, request)
-
     # Задаём значение полей из БД
     set_choices_select_field_value(form)
 
@@ -136,6 +133,9 @@ def form_deal():
         else:
             flash("Форма не была отправлена в телеграм. Убедитесь, что работает телеграм и отправьте заново.\n"
                   "Если ошибка повторяется, то обратитесь к администратору")
+
+    # Заполняем поля формы полученными параметрами
+    set_default_form_values(form, request)
 
     return render_template('form_deal.html', form=form)
 
