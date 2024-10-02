@@ -8,13 +8,20 @@ CHAT_ID = CHAT_ID
 telegramBot = telepot.Bot(token=TOKEN_BOT)
 
 
-def generate_text_for_deal(data: dict) -> str:
+def generate_text_for_deal(data: dict, type_msg: str) -> str:
     """
-    Генерируем текст сообщения по сделке для отправки в телеграмм
-    :param data:
+    Генерируем текст сообщения по сделке для отправки в телеграм
+    :param type_msg: Тип сообщения edit или send
+    :param data: Данные по сделке
     :return: str - строка с текстом сообщения
     """
-    return f"""🟡 @Monareich, Просьба согласовать:
+    if type_msg == "edit":
+        row1 = f"⚪️ сделка <u>пересогласована:</u>"
+    elif type_msg == "send":
+        row1 = f"🟡 @Monareich, Просьба согласовать:"
+    else:
+        row1 = f""
+    return row1 + f"""
     Менеджер: <b>{data.get('manager')}</b>
     Клиент: <b>{data.get('client')}</b>
     А/м: <b>{data.get('car_model')}</b>
@@ -32,9 +39,29 @@ def generate_text_for_deal(data: dict) -> str:
     """
 
 
-def create_message(data: dict) -> (str, InlineKeyboardMarkup):
+def generate_keyboard_for_deal(data: dict, type_msg: str) -> InlineKeyboardMarkup | ReplyKeyboardMarkup:
+    """
+    Генерируем клавиатуру сообщения по сделке для отправки в телеграм
+    :param type_msg: Тип сообщения edit или send
+    :param data: Данные по сделке
+    :return: Клавиатура
+    """
+    if type_msg == "edit":
+        keyboard = None
+    elif type_msg == "send":
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🟢 Согласовать", callback_data=f"approve_id{data.get('id_row')}"),
+             InlineKeyboardButton(text="🔴 Отклонить", callback_data=f"reject_id{data.get('id_row')}")]
+        ])
+    else:
+        keyboard = None
+    return keyboard
+
+
+def create_message(data: dict, type_msg: str) -> (str, InlineKeyboardMarkup):
     """
     Генерирует текст сообщения
+    :param type_msg: Тип сообщения edit или send
     :param data: словарь с ключами
     Пример:
     {
@@ -56,20 +83,18 @@ def create_message(data: dict) -> (str, InlineKeyboardMarkup):
         строка с текстом сообщения и добавленной инлайн клавиатурой,
         экземпляр класса InlineKeyboardMarkup с инлайн клавиатурой
     """
-    text = generate_text_for_deal(data)
-    # Генерируем клавиатуру
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🟢 Согласовать", callback_data=f"approve_id{data.get('id_row')}"),
-         InlineKeyboardButton(text="🔴 Отклонить", callback_data=f"reject_id{data.get('id_row')}")]
-    ])
+    # Создаём сообщение
+    text = generate_text_for_deal(data, type_msg=type_msg)
+    # Создаём клавиатуру
+    keyboard = generate_keyboard_for_deal(data, type_msg=type_msg)
     return text, keyboard
 
 
 def send_message(
         message: str,
-        keyboard: InlineKeyboardMarkup | ReplyKeyboardMarkup,
         message_id: str | int,
-        chat_id: str | int
+        chat_id: str | int,
+        keyboard: InlineKeyboardMarkup | ReplyKeyboardMarkup,
 ) -> bool:
     """
     Отправка сообщения в чат телеграм
@@ -87,5 +112,34 @@ def send_message(
         return True
     except ConnectionError as ce:
         logger.error('Отправка уведомления в телеграм была неудачна. Описание ошибки:')
+        logger.error(ce)
+        return False
+
+
+def edit_message(
+        message: str,
+        message_id: str | int,
+        chat_id: str | int,
+        keyboard: InlineKeyboardMarkup | ReplyKeyboardMarkup = None,
+) -> bool:
+    """
+    Редактируем сообщение в чате телеграм
+    :param message: Текст сообщения
+    :param message_id: Идентификатор сообщения в чате
+    :param chat_id: Чат в котором находится сообщение
+    :param keyboard: Инланй или Репли клавиатура
+    :return: Результат выполнения
+    """
+    try:
+        # Редактируем предыдущее сообщение, которое отправлено на пересогласование
+        telegramBot.editMessageText(
+            msg_identifier=(chat_id, message_id),
+            text=message,
+            parse_mode="HTML",
+            reply_markup=keyboard
+        )
+        return True
+    except ConnectionError as ce:
+        logger.error('Редактирование сообщения в телеграм было неудачна. Описание ошибки:')
         logger.error(ce)
         return False

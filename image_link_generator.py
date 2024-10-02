@@ -118,9 +118,14 @@ def form_deal():
             message_id = request.args.get('message_id')
             chat_id = request.args.get('chat_id')
 
+            # Редактируем предыдущее сообщение, которое отправлено на пересогласование
+            if message_id:
+                message, keyboard = st.create_message(deal_data, "edit")
+                result_tg = st.edit_message(message, message_id, chat_id, keyboard)
+
             # Отправляем сообщение в телеграм с данными из формы
-            message, keyboard = st.create_message(deal_data)
-            result_tg = st.send_message(message, keyboard, message_id, chat_id)
+            message, keyboard = st.create_message(deal_data, "send")
+            result_tg = st.send_message(message, message_id, chat_id, keyboard)
         else:
             result_tg = False
 
