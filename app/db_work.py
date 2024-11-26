@@ -43,6 +43,9 @@ class DatabaseConnector:
 
         # Дополняем строки наименования столбцов таблицы и их значений
         for item in columns_names:
+            # Удаляем кавычки из значений
+            data_deal[item] = data_deal[item].replace('"', '')
+
             # Удаляем разделение разрядов по числовым данным
             if item in columns_names_int:
                 data_deal[item] = data_deal[item].replace(' ', '')
