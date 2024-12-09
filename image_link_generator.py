@@ -75,9 +75,9 @@ def get_image_links():
                     response.append({"url": image['url']})
             logger.info(f"Отправлено изображение для пары brand: {brand}, article: {article}")
 
-        # TODO Удалить после тестов одного изображения для бренда hyundai-kia
-        if brand.lower() == 'hyundai-kia':
-            response = [{"url": "https://img.smart-a.ru/images/test/01.jpg"}]
+        # # TODO Удалить после тестов одного изображения для бренда hyundai-kia
+        # if brand.lower() == 'hyundai-kia':
+        #     response = [{"url": "https://img.smart-a.ru/images/test/01.jpg"}]
 
         # Если данных нет, то возвращаем ошибку
         else:
