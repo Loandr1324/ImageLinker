@@ -70,7 +70,7 @@ def get_image_links():
             for image in list_image:
                 # Т.к. в базе может быть несколько вариантов с одним брендом артикулом, то выбираем точное соответствие
                 number = image.get('number', '').split("_")
-                if article == number[0].lower():
+                if article.lower() == number[0].lower():
                     # Добавляем URL без предварительного экранирования
                     response.append({"url": image['url']})
             logger.info(f"Отправлено изображение для пары brand: {brand}, article: {article}")
