@@ -65,6 +65,13 @@ def get_image_links():
         list_image = sorted(list_image, key=lambda x: x['url'])  # сортируем по значению ключа url
         # logger.debug(f"Получили по запросу из БД: {list_image=}")
 
+        # TODO Удалить после тестов одного изображения для бренда hyundai-kia
+        if brand.lower() == 'hyundai-kia':
+            list_image = [{
+                "number": article,
+                "url": "https://img.smart-a.ru/images/test/01.jpg"
+            }]
+
         # Если данные есть добавляем их в ответ на запрос
         if list_image:
             for image in list_image:
@@ -79,10 +86,6 @@ def get_image_links():
         else:
             logger.info(f"No images found for brand: {brand}, article: {article}")
             abort(404, description="Images not found")
-
-        # TODO Удалить после тестов одного изображения для бренда hyundai-kia
-        if brand.lower() == 'hyundai-kia':
-            response = [{"url": "https://img.smart-a.ru/images/test/01.jpg"}]
 
     # Если ответ не сформирован, то возвращаем ошибку
     if not response:
